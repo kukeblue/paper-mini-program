@@ -3,8 +3,8 @@ import { View, Text } from '@tarojs/components'
 import './index.less'
 
 function Index(props) {
-  return <View className='index'>
-    <Text>个人中心</Text>
+  return <View className='my-page'>
+    <Text className='title'>个人中心</Text>
   </View>;
 }
 

@@ -11,13 +11,13 @@ export default {
   },
   tabBar: {
     list: [{
-      iconPath: 'resource/index.png',
+      iconPath: 'resource/tabbar/index.png',
       selectedIconPath: 'resource/tabbar/index_fill.png',
       pagePath: 'pages/index/index',
       text: '首页'
     },
     {
-      iconPath: 'resource/my.png',
+      iconPath: 'resource/tabbar/my.png',
       selectedIconPath: 'resource/tabbar/my_fill.png',
       pagePath: 'pages/my/index',
       text: '我的'
