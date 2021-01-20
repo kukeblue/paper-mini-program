@@ -1,4 +1,4 @@
 export default {
-  navigationBarTitleText: '个人中心',
+  navigationBarTitleText: '资源查询',
   navigationStyle: "custom",
 }

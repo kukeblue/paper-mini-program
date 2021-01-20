@@ -1,6 +1,7 @@
 export default {
   pages: [
     'pages/index/index',
+    'pages/search/index',
     'pages/my/index'
   ],
   window: {
@@ -15,6 +16,11 @@ export default {
       selectedIconPath: 'resource/tabbar/index_fill.png',
       pagePath: 'pages/index/index',
       text: '首页'
+    },{
+      iconPath: 'resource/tabbar/search.png',
+      selectedIconPath: 'resource/tabbar/search_fill.png',
+      pagePath: 'pages/search/index',
+      text: '查询'
     },
     {
       iconPath: 'resource/tabbar/my.png',
