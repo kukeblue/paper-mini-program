@@ -6,19 +6,13 @@ class App extends Component {
 
   async componentDidShow() {
     await Taro.getStorage({
-      key: "user",
+      key: "token",
       success: () => {
-        console.log("user exist")
-        Taro.navigateTo({
-          url: 'pages/my/index'
-        })
       },
       fail: async () => {
-        console.log("user not exist")
         await Taro.login({
           success: async function (res) {
             if (res.code) {
-              console.log('code: ' + res.code);
               await Taro.request({
                 url: "http://localhost:8080/api/wxUser/login",
                 data: {
@@ -28,8 +22,8 @@ class App extends Component {
                   console.log(res)
                   if (res.data['status'] == 0) {
                     await Taro.setStorage({
-                      key: 'user',
-                      data: res['result'],
+                      key: 'token',
+                      data: res.data['result']['openid'],
                       success: () => {
                         console.log('存储用户成功')
                       }
