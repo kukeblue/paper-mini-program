@@ -10,6 +10,7 @@ function SearchBar()  {
     <Input className='search-bar' type='text' placeholder='请输入关键字'/>
   </View>
 }
+
 function FilterPanel() {
   return <View className='tag-pannel'>
     <View className='tag-bar flex-row-center'>
@@ -59,7 +60,6 @@ function FilterPanel() {
     </View>
   </View>
 }
-
 
 // @type Page
 function Index(props) {
