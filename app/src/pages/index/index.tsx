@@ -28,64 +28,61 @@ function PageSwiper() {
 //@type Page | @dec 首页
 function Index(props) {
   const [isAuth, setIsAuth] = useState(false);
-  useEffect(() => {
-    Taro.getSetting(
-      {
-        success: (res) => {
-          if (res.authSetting["scope.userInfo"]) {
-            setIsAuth(true);
-          } else {
-            setIsAuth(false);
-          }
-        }
-      }
-    )
-    if (isAuth) {
-      Taro.getUserInfo({
-        success: async (res) => {
-          console.log(res['userInfo'])
-          const { avatarUrl, city, country, gender, language, nickName, province } = res.userInfo
-          var openId;
-          await Taro.getStorage({
-            key: "token",
-            success: (res) => {
-              openId = JSON.stringify(res.data);
-            }
-          });
-          console.log('openID:' + String(openId))
+  // useEffect(() => {
+  //   Taro.getSetting(
+  //     {
+  //       success: (res) => {
+  //         if (res.authSetting["scope.userInfo"]) {
+  //           setIsAuth(true);
+  //         } else {
+  //           setIsAuth(false);
+  //         }
+  //       }
+  //     }
+  //   )
+  //   if (isAuth) {
+  //     Taro.getUserInfo({
+  //       success: async (res) => {
+  //         console.log(res['userInfo'])
+  //         const { avatarUrl, city, country, gender, language, nickName, province } = res.userInfo
+  //         var openId;
+  //         await Taro.getStorage({
+  //           key: "token",
+  //           success: (res) => {
+  //             openId = JSON.stringify(res.data);
+  //           }
+  //         });
+  //         console.log('openID:' + String(openId))
+  //         Taro.request({
+  //           method: "POST",
+  //           url: 'http://localhost:8080/api/wxUser/add',
+  //           data: {
+  //             'openid': openId,
+  //             'avatarUrl': avatarUrl,
+  //             'city': city,
+  //             'country': country,
+  //             'gender': gender,
+  //             'language': language,
+  //             'nickName': nickName,
+  //             'province': province,
+  //           },
+  //           success: (res) => {
 
-          // await Taro.getStorage({ key: 'token' ,success:(res)=>{}})
-          Taro.request({
-            method: "POST",
-            url: 'http://localhost:8080/api/wxUser/add',
-            data: {
-              'openid': openId,
-              'avatarUrl': avatarUrl,
-              'city': city,
-              'country': country,
-              'gender': gender,
-              'language': language,
-              'nickName': nickName,
-              'province': province,
-            },
-            success: (res) => {
+  //             Taro.setStorage({
+  //               key: 'user',
+  //               data: res,
+  //               success: (res) => {
+  //                 console.log("saveResponse:" + res)
+  //               }
+  //             })
+  //           }
+  //         })
 
-              Taro.setStorage({
-                key: 'user',
-                data: res,
-                success: (res) => {
-                  console.log("saveResponse:" + res)
-                }
-              })
-            }
-          })
-
-        }
-      })
-    }
-  }, [isAuth]);
-  console.log('isAuth' + isAuth)
-  return isAuth ? <View className='page index-page'>
+  //       }
+  //     })
+  //   }
+  // }, [isAuth]);
+  return <View className='page index-page'>
     {/* 轮播图 */}
     <PageSwiper />
     <View className='page-content'>
@@ -155,10 +152,7 @@ function Index(props) {
         </View>
       </View>
     </View>
-
-  </View> : <Button open-type="getUserInfo" onGetUserInfo={() => {
-    setIsAuth(true)
-  }}>授权登录</Button>
+  </View> 
 }
 
 export default Index;
