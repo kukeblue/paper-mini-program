@@ -1,136 +1,160 @@
-.search-page  {
-    .navigationBar {
-        height: 200px;
-        width: 100%;
-        background-color: #fedd2e;
-        padding-top: 100px;
-        .navigationBar-title {
-            color: #000;
-            font-weight: 400;
-        }
-        .search-bar-icon {
-            width: 45px;
-            height: 45px;
-            position: absolute;
-            left: 60px;
-            top: 12px;
-        }
-        .search-bar {
-            height: 70px;
-            padding-left: 100px;
-            padding-right: 20px;
-            margin: 40px 0px;
-            border-radius: 30px;
-            background-color: #fff;
-            color: #333;
-        }
+.search-page {
+  .navigationBar {
+    height: 200px;
+    width: 100%;
+    background-color: #fedd2e;
+    padding-top: 100px;
+
+    .navigationBar-title {
+      color: #000;
+      font-weight: 400;
     }
-    .filter-panel {
-        position: relative;
+
+    .search-bar-icon {
+      width: 45px;
+      height: 45px;
+      position: absolute;
+      left: 60px;
+      top: 12px;
     }
-    .drop-button-panel {
-        background-color: #fff;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        .order-button {
-            font-size: 30px;
-            color: #999;
-        }
-        .drop-button {
-            padding-left: 50px;
-            border-left: 1px solid #ccc;
-            font-size: 30px;
-            color: #333;
-        }
+
+    .search-bar {
+      height: 70px;
+      padding-left: 100px;
+      padding-right: 20px;
+      margin: 40px 0px;
+      border-radius: 30px;
+      background-color: #fff;
+      color: #333;
     }
-    .tag-pannel {
-        position: absolute;
-        top: 71px;
-        width: 100%;
-        border-top: 1px solid #eee;
-        padding-top: 30px;
-        background-color: #ffffff;
-        .tag-bar {
-            padding: 10px 30px;
-            padding-right: 0px;
-        }
-        .tag {
-            display: inline-block;
-            margin: 15px 15px;
-            font-size: 28px;
-            padding: 2px 15px;
-            border-radius: 10px;
-            color: #333;
-        }
-        .tag_active {
-            .tag();
-            background-color: #fedd2e;
-        }
-        .tag-type {
-            font-size: 28px;
-            margin-right: 30px;
-            color: #999;
-        }
-        .tag-scroll-view {
-            width: 600px;
-            white-space:nowrap;
-        }
-        .icon_arrow_up {
-            width: 60px;
-            height: 60px;
-        }
+  }
+
+  .filter-panel {
+    position: relative;
+  }
+
+  .drop-button-panel {
+    background-color: #fff;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+
+    .order-button {
+      font-size: 30px;
+      color: #999;
     }
-    .list-dackdim {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0px;
-        z-index: 999;
-        background: rgba(000, 000, 000, 0.3);
+
+    .drop-button {
+      padding-left: 50px;
+      border-left: 1px solid #ccc;
+      font-size: 30px;
+      color: #333;
     }
-    .paper-list {
-        position: relative;
-        .paper-item {
-            font-size: 30px;
-            padding: 45px 20px;
-            border-top: 1px solid #eee;
-            background-color: #fff;
-        }
-        .paper-data {
-            padding-top: 30px;
-            line-height: 35px;
-            font-size: 24px;
-            text-align: right;
-            margin-left: 30px;
-            color: #999;
-        }
-        .paper-price {
-            color: #ed5846;
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
-        .paper-pic {
-            width: 100px;
-            height: 100px;
-            margin-right: 20px;
-            background-color: #ccc;
-        }
-        .paper-info {
-            width: 450px;
-        }
-        .paper-info-dec {
-            margin-top: 10px;
-            font-size: 25px;
-        }
-        .paper-info-tag {
-            border-radius: 20px;
-            color: #999;
-        }
+  }
+
+  .tag-pannel {
+    position: absolute;
+    top: 71px;
+    width: 100%;
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+    background-color: #ffffff;
+
+    .tag-bar {
+      padding: 10px 30px;
+      padding-right: 0px;
     }
-    .search-header {
-        position: sticky;
-        z-index: 1000;
-        top: 0px;
+
+    .tag {
+      display: inline-block;
+      margin: 15px 15px;
+      font-size: 28px;
+      padding: 2px 15px;
+      border-radius: 10px;
+      color: #333;
     }
+
+    .tag_active {
+      .tag();
+      background-color: #fedd2e;
+    }
+
+    .tag-type {
+      font-size: 28px;
+      margin-right: 30px;
+      color: #999;
+    }
+
+    .tag-scroll-view {
+      width: 600px;
+      white-space: nowrap;
+    }
+
+    .icon_arrow_up {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .list-dackdim {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    z-index: 999;
+    background: rgba(000, 000, 000, 0.3);
+  }
+
+  .paper-list {
+    position: relative;
+
+    .paper-item {
+      font-size: 30px;
+      padding: 45px 20px;
+      border-top: 1px solid #eee;
+      background-color: #fff;
+    }
+
+    .paper-data {
+      padding-top: 30px;
+      line-height: 35px;
+      font-size: 24px;
+      text-align: right;
+      margin-left: 30px;
+      color: #999;
+    }
+
+    .paper-price {
+      color: #ed5846;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .paper-pic {
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+      background-color: #ccc;
+    }
+
+    .paper-info {
+      width: 450px;
+    }
+
+    .paper-info-dec {
+      margin-top: 10px;
+      font-size: 25px;
+    }
+
+    .paper-info-tag {
+      border-radius: 20px;
+      color: #999;
+    }
+  }
+
+  .search-header {
+    position: sticky;
+    z-index: 1000;
+    top: 0px;
+  }
 }

@@ -13,11 +13,11 @@ export interface User {
     gender?: number
     language?: string
     avatarUrl?: string
-    nickName?:string
+    nickName?: string
 }
 
 
-export interface  Paper {
+export interface Paper {
     size: number
     id: string
     name: string
@@ -31,7 +31,7 @@ export interface  Paper {
     year: string;
     tagIds: string[]
     previewLinks: string[]
-    region:string[]
+    region: string[]
     file: string
 }
 
@@ -45,4 +45,14 @@ export interface GradeStep {
     gradeId: string
     name: string
     alias: string
+}
+
+export interface Subject {
+    id: string
+    name: string
+}
+
+export interface Tag {
+    id: string
+    name: string
 }
