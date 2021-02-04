@@ -12,12 +12,27 @@ export interface queryType {
 }
 
 function useModel() {
-  const {list: gradeList} = useOptionFormListHook({url: '/grade/list'})
-  const {list: gradeStepList} = useOptionFormListHook({url: '/gradeStep/list'})
-  const [count, setCount] = useState(0);
+  const {
+    list: gradeList, 
+    optionsMap: gradeOptionMap,} = useOptionFormListHook({url: '/grade/list'})
+  const {
+    list: gradeStepList,
+    optionsMap: gradeStepOptionMap,
+  } = useOptionFormListHook({url: '/gradeStep/list'})
   const [showfilterPanel, setShowFilterPanel] = useState(false);
   const [query, setQuery] = useState<queryType>({})
   const [sort, setSort] = useState<SortType>("default")
+ 
+  const {
+    optionsMap: tagOptionMap,
+  } = useOptionFormListHook({
+    url: '/tag/list',
+  });
+  const {
+    optionsMap: subjectOptionMap,
+  } = useOptionFormListHook({
+    url: '/subject/list',
+  });
 
   const updateQuery = (q: queryType) => {
       if(q.gradeId != undefined && q.gradeId != query.gradeId) {
@@ -27,17 +42,19 @@ function useModel() {
   }
 
   return {
-    gradeList,
-    showfilterPanel,
-    setShowFilterPanel,
-    count,
-    setCount,
+    showfilterPanel,    // 展开查询过滤列表
+    setShowFilterPanel, // 展开查询过滤列表(设置)
     setSort,
     sort,
     query,
     setQuery,
     updateQuery,
-    gradeStepList
+    gradeList,  
+    gradeStepList,
+    gradeOptionMap,
+    gradeStepOptionMap,
+    tagOptionMap,
+    subjectOptionMap
   };
 }
 

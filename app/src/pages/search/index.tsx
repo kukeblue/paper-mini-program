@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, ScrollView, Input, Image } from '@tarojs/components'
+import { View, ScrollView, Input, Image, Text} from '@tarojs/components'
 import './index.less'
 import icon_search from '../../resource/icon/search.png'
 import icon_arrow_up from '../../resource/icon/arrow_up.png'
 import useModel, { SortType } from "./index.store";
 import { usePage } from '../../utils/hooks'
 import { Grade, Paper, GradeStep } from '../../types'
+import { termType } from '../../config/common.data'
 
 // @type React Component | @dec 查询框
 function SearchBar()  {
@@ -126,17 +127,23 @@ function PaperList() {
               <View className='paper-pic'> 
               </View>
               <View className='paper-info'> 
-                  <View>部编人教版小学语文一年级上册全册配套测试卷(附答案)</View>
+                  <View>{item.name}</View>
                   <View className='paper-info-dec flex-row-center'>
-                    <View className='paper-info-tag'>小学数学</View>
+                      {/* <View className='paper-info-tag'>小学数学</View> */}
+                      <View className='paper-dec-tag'>
+                        <Text>{model.gradeOptionMap[item.gradeId]?.name}/</Text>
+                        <Text>{model.gradeStepOptionMap[item.gradeStepId]?.name}/</Text>
+                        <Text>{termType[item.term]}</Text>
+                      </View>
+                      <View className='paper-dec-tag'>{model.subjectOptionMap[item.subjectId]?.name}</View>
                   </View>
               </View>
             </View>
             
             <View className='paper-data'> 
-                <View className='paper-price'> ¥1</View>
-                <View>123下载</View>
-                <View>1125收藏</View>
+                <View className='paper-price'>{item.price? <Text>'¥'+item.price </Text>: <Text className='fz-30'>免费</Text>}</View>
+                <View>0下载</View>
+                <View>0收藏</View>
             </View>
           </View>
       })}
