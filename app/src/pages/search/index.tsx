@@ -5,36 +5,36 @@ import icon_search from '../../resource/icon/search.png'
 import icon_arrow_up from '../../resource/icon/arrow_up.png'
 import useModel, { SortType } from "./index.store";
 import { usePage } from '../../utils/hooks'
-import { Grade, Paper, GradeStep } from '../../types'
+import { Grade, Paper, GradeStep, Subject, Tag } from '../../types'
 import { termType } from '../../config/common.data'
 
 // @type React Component | @dec 查询框
-function SearchBar()  {
+function SearchBar() {
   return <View style='position: relative;' className='p-l-30 p-r-30'>
-    <Image src={icon_search} className='search-bar-icon'/>
-    <Input className='search-bar' type='text' placeholder='请输入关键字'/>
+    <Image src={icon_search} className='search-bar-icon' />
+    <Input className='search-bar' type='text' placeholder='请输入关键字' />
   </View>
 }
 // @type React Component | @dec 下拉标签过滤框
 function FilterPanel() {
-  const { setShowFilterPanel, gradeList, updateQuery, query, gradeStepList} = useModel();
+  const { setShowFilterPanel, gradeList, updateQuery, query, gradeStepList, subjectList, tagList } = useModel();
   return <View className='tag-pannel'>
     <View className='tag-bar flex-row-center'>
       <View className='tag-type'>
         分类
       </View>
       <ScrollView scrollX className='tag-scroll-view'>
-        <View 
-          onClick={()=>updateQuery({gradeId: ''})}
+        <View
+          onClick={() => updateQuery({ gradeId: '' })}
           className={!query.gradeId ? 'tag_active' : 'tag'}>全部</View>
-          {gradeList.map((item: Grade)=>{
-          return <View 
-            key={item.id} 
+        {gradeList.map((item: Grade) => {
+          return <View
+            key={item.id}
             className={query.gradeId == item.id ? 'tag_active' : 'tag'}
-            onClick={()=>{updateQuery({gradeId: item.id})}}
+            onClick={() => { updateQuery({ gradeId: item.id }) }}
           >
-              {item.name}
-            </View>
+            {item.name}
+          </View>
         })}
       </ScrollView>
     </View>
@@ -43,17 +43,17 @@ function FilterPanel() {
         学期
       </View>
       <ScrollView scrollX className='tag-scroll-view'>
-       <View 
-          onClick={()=>updateQuery({gradeStepId: ''})}
+        <View
+          onClick={() => updateQuery({ gradeStepId: '' })}
           className={!query.gradeStepId ? 'tag_active' : 'tag'}>全部</View>
-          {gradeStepList.filter((s:GradeStep)=>s.gradeId == query.gradeId).map((item: GradeStep)=>{
-              return <View 
-              key={item.id} 
-              onClick={()=>{updateQuery({gradeStepId: item.id})}} 
-              className={item.id == query.gradeStepId ? 'tag_active' : 'tag'}>
-                {item.name}
-              </View>
-          })}
+        {gradeStepList.filter((s: GradeStep) => s.gradeId == query.gradeId).map((item: GradeStep) => {
+          return <View
+            key={item.id}
+            onClick={() => { updateQuery({ gradeStepId: item.id }) }}
+            className={item.id == query.gradeStepId ? 'tag_active' : 'tag'}>
+            {item.name}
+          </View>
+        })}
       </ScrollView>
     </View>}
     <View className='tag-bar flex-row-center'>
@@ -61,24 +61,40 @@ function FilterPanel() {
         学科
       </View>
       <ScrollView scrollX className='tag-scroll-view'>
-        <View className='tag'>数学</View>
-        <View className='tag'>语文</View>
-        <View className='tag_active'>英语</View>
-        <View className='tag'>化学</View>
+        <View
+          onClick={() => updateQuery({ subjectId: '' })}
+          className={!query.subjectId ? 'tag_active' : 'tag'}>全部</View>
+        {subjectList.map((item: Subject) => {
+          return <View
+            key={item.id}
+            onClick={() => { updateQuery({ subjectId: item.id }) }}
+            className={item.id == query.subjectId ? 'tag_active' : 'tag'}>
+            {item.name}
+          </View>
+        })}
       </ScrollView>
     </View>
     <View className='tag-bar flex-row-center'>
       <View className='tag-type'>
         标签
       </View>
-      <ScrollView scrollX className='tag-scroll-view'>
-        <View className='tag'>2020年高考</View>
-        <View className='tag'>小升初</View>
-        <View className='tag_active'>名校专题</View>
-      </ScrollView>
+      <View
+        onClick={() => updateQuery({ tagIds: [] })}
+        className={(!query.tagIds || query.tagIds.length == 0) ? 'tag_active' : 'tag'}>全部</View>
+      {tagList?.map((item: Tag) => {
+        return <View
+          key={item.id}
+          onClick={() => {
+            let newTags = [item.id].concat(query.tagIds ? query.tagIds.slice() : [])
+            updateQuery({ tagIds: newTags })
+          }}
+          className={query.tagIds?.includes(item.id) ? 'tag_active' : 'tag'}>
+          {item.name}
+        </View>
+      })}
     </View>
     <View className='flex-center'>
-      <Image onClick={()=>{
+      <Image onClick={() => {
         setShowFilterPanel(false)
       }} className='icon_arrow_up p-20' src={icon_arrow_up}></Image>
     </View>
@@ -86,31 +102,31 @@ function FilterPanel() {
 }
 function DropButtonPanel() {
   const model = useModel();
-  const getItemClass = (item: SortType) => item && model.sort == item ? 'order-button color-333': 'order-button'
+  const getItemClass = (item: SortType) => item && model.sort == item ? 'order-button color-333' : 'order-button'
   return <View className='filter-panel'>
     <View className='drop-button-panel'>
-        <View 
-          onClick={()=>{model.setSort("default")}}
-          className={getItemClass("default")}>
-          综合排序
+      <View
+        onClick={() => { model.setSort("default") }}
+        className={getItemClass("default")}>
+        综合排序
         </View>
-        <View 
-          onClick={()=>{model.setSort("created")}}
-          className={getItemClass("created")}>
-          最新
+      <View
+        onClick={() => { model.setSort("created") }}
+        className={getItemClass("created")}>
+        最新
         </View>
-        <View 
-          onClick={()=>{model.setSort("free")}}
-          className={getItemClass("free")}>
-          免费
+      <View
+        onClick={() => { model.setSort("free") }}
+        className={getItemClass("free")}>
+        免费
         </View>
-        <View  
-          onClick={()=>{ model.setShowFilterPanel(!model.showfilterPanel) }}
-          className='drop-button'>
-          筛选
+      <View
+        onClick={() => { model.setShowFilterPanel(!model.showfilterPanel) }}
+        className='drop-button'>
+        筛选
       </View>
     </View>
-    {model.showfilterPanel && <FilterPanel/>}
+    {model.showfilterPanel && <FilterPanel />}
   </View>
 }
 // @type Page | @dec 试卷列表
@@ -146,28 +162,25 @@ function PaperList() {
                 <View>0收藏</View>
             </View>
           </View>
-      })}
-      
-    </View>
-}
-// @type Page | @dec 主页面
-function Index(props) {
-  const model = useModel();
-  return <View className='search-page page'>
-      <View className='search-header'>
-        <View className='navigationBar'>
-          <View className='navigationBar-title flex-center'>
-              资源中心
-          </View>
-          <SearchBar/>
-        </View>
-     <DropButtonPanel/>
-     </View>
-     <PaperList></PaperList>
+        })}
   </View>
 }
-
-
+// @type Page | @dec 主页面
+function Index() {
+  const model = useModel();
+  return <View className='search-page page'>
+    <View className='search-header'>
+      <View className='navigationBar'>
+        <View className='navigationBar-title flex-center'>
+          资源中心
+          </View>
+        <SearchBar />
+      </View>
+      <DropButtonPanel />
+    </View>
+    <PaperList></PaperList>
+  </View>
+}
 
 
 export default Index;
