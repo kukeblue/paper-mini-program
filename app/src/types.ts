@@ -33,6 +33,8 @@ export interface Paper {
     previewLinks: string[]
     region: string[]
     file: string
+    pageView: number
+    download: number
 }
 
 export interface Grade {

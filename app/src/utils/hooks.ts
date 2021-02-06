@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import request from './request'
 
+export interface SortWarp {
+  value?: string,
+  direction?: 'DESC' | 'ASC'
+}
+
 //@type Hook Function 分页Hoos,TS版本
 interface usePageProps {
   url: string,
   pageSize: number,
   query: Object,
+  sort: SortWarp,
+  keyword?: string
   onReloadAfter?: (res: any) => void
 }
 
@@ -13,15 +20,23 @@ export function usePage(props: usePageProps) {
 
   const { url, pageSize, onReloadAfter } = props;
   const [query, setQuery] = useState<any>(props.query);
+  const [keyword, setKeyword] = useState<any>(props.keyword);
+  const [sort, setSort] = useState<any>(props.sort);
   const [status, setStatus] = useState<string>('more');
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState([]);
 
   const ref = useRef({ pageNo: 1 });
 
+  const updateQueryAndSort = (query, sort, keyword?)=> {
+    setQuery(query)
+    setSort(sort)
+    keyword && setKeyword(keyword)
+  }
+
   useEffect(() => {
     reload()
-  }, [query])
+  }, [query, sort, keyword])
 
   const reload = async (pageNo?: number) => {
     setStatus('loading');
@@ -30,9 +45,11 @@ export function usePage(props: usePageProps) {
     const pz = pageSize || 10;
     const resp: any = await request({
       url, data: {
+        sort,
         query,
         pageNo,
-        pageSize: pz
+        pageSize: pz,
+        keyword
       }
     });
     console.log('分页PAGE获取成功',query, resp)
@@ -60,7 +77,7 @@ export function usePage(props: usePageProps) {
     if (status === 'noMore') return;
     await reload(ref.current.pageNo);
   }
-  return { list, setList, status, setStatus, reload, loadMore, total, setQuery };
+  return { list, setList, status, setStatus, reload, loadMore, total, setQuery, setSort, updateQueryAndSort };
 }
 
 

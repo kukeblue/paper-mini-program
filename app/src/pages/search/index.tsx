@@ -3,16 +3,25 @@ import { View, ScrollView, Input, Image, Text} from '@tarojs/components'
 import './index.less'
 import icon_search from '../../resource/icon/search.png'
 import icon_arrow_up from '../../resource/icon/arrow_up.png'
-import useModel, { SortType } from "./index.store";
+import useModel, { SortEnum, SortType } from "./index.store";
 import { usePage } from '../../utils/hooks'
 import { Grade, Paper, GradeStep, Subject, Tag } from '../../types'
 import { termType } from '../../config/common.data'
 
 // @type React Component | @dec 查询框
 function SearchBar() {
+  const { keyword, setKeyword, seaech } = useModel();
+
   return <View style='position: relative;' className='p-l-30 p-r-30'>
     <Image src={icon_search} className='search-bar-icon' />
-    <Input className='search-bar' type='text' placeholder='请输入关键字' />
+    <Input 
+      onInput={(v)=>{setKeyword(v.detail.value)}}
+      onConfirm={()=>{seaech()}} 
+      value={keyword} 
+      confirmType="search" 
+      className='search-bar' 
+      type='text' 
+      placeholder='请输入关键字' />
   </View>
 }
 // @type React Component | @dec 下拉标签过滤框
@@ -106,18 +115,18 @@ function DropButtonPanel() {
   return <View className='filter-panel'>
     <View className='drop-button-panel'>
       <View
-        onClick={() => { model.setSort("default") }}
-        className={getItemClass("default")}>
+        onClick={() => { model.setSort(SortEnum.download) }}
+        className={getItemClass(SortEnum.download)}>
         综合排序
         </View>
       <View
-        onClick={() => { model.setSort("created") }}
-        className={getItemClass("created")}>
+        onClick={() => { model.setSort(SortEnum.new) }}
+        className={getItemClass(SortEnum.new)}>
         最新
         </View>
       <View
-        onClick={() => { model.setSort("free") }}
-        className={getItemClass("free")}>
+        onClick={() => { model.setSort(SortEnum.free) }}
+        className={getItemClass(SortEnum.free)}>
         免费
         </View>
       <View
@@ -131,13 +140,13 @@ function DropButtonPanel() {
 }
 // @type Page | @dec 试卷列表
 function PaperList() {
-    const { list } = usePage({url: '/paper/page', pageSize: 20, query: {}})
+   
     const model = useModel();
     return <View className='paper-list'>
       {model.showfilterPanel && <View 
         onClick={()=>{model.setShowFilterPanel(false)}}
         className='list-dackdim'></View>}
-      {list.map((item: Paper)=>{
+      {model.list.map((item: Paper)=>{
         return <View key={item.id} className='paper-item flex-between'>
             <View className='flex-center'>
               <View className='paper-pic'> 
@@ -155,11 +164,10 @@ function PaperList() {
                   </View>
               </View>
             </View>
-            
             <View className='paper-data'> 
-                <View className='paper-price'>{item.price? <Text>'¥'+item.price </Text>: <Text className='fz-30'>免费</Text>}</View>
-                <View>0下载</View>
-                <View>0收藏</View>
+                <View className='paper-price'>{item.price? <Text>¥{item.price} </Text>: <Text className='fz-30'>免费</Text>}</View>
+                <View>{item.download}下载</View>
+                <View>{item.pageView}浏览</View>
             </View>
           </View>
         })}
