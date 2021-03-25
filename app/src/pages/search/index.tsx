@@ -1,12 +1,13 @@
 import React from 'react'
-import { View, ScrollView, Input, Image, Text} from '@tarojs/components'
+import { View, ScrollView, Input, Image, Text } from '@tarojs/components'
 import './index.less'
 import icon_search from '../../resource/icon/search.png'
 import icon_arrow_up from '../../resource/icon/arrow_up.png'
 import useModel, { SortEnum, SortType } from "./index.store";
-import { usePage } from '../../utils/hooks'
+import useGlobalModel from '../../app.store'
 import { Grade, Paper, GradeStep, Subject, Tag } from '../../types'
 import { termType } from '../../config/common.data'
+import Taro from '@tarojs/taro'
 
 // @type React Component | @dec 查询框
 function SearchBar() {
@@ -14,19 +15,20 @@ function SearchBar() {
 
   return <View style='position: relative;' className='p-l-30 p-r-30'>
     <Image src={icon_search} className='search-bar-icon' />
-    <Input 
-      onInput={(v)=>{setKeyword(v.detail.value)}}
-      onConfirm={()=>{seaech()}} 
-      value={keyword} 
-      confirmType="search" 
-      className='search-bar' 
-      type='text' 
+    <Input
+      onInput={(v) => { setKeyword(v.detail.value) }}
+      onConfirm={() => { seaech() }}
+      value={keyword}
+      confirmType="search"
+      className='search-bar'
+      type='text'
       placeholder='请输入关键字' />
   </View>
 }
 // @type React Component | @dec 下拉标签过滤框
 function FilterPanel() {
-  const { setShowFilterPanel, gradeList, updateQuery, query, gradeStepList, subjectList, tagList } = useModel();
+  const {gradeList, gradeStepList, subjectList, tagList} = useGlobalModel()
+  const { setShowFilterPanel,updateQuery, query} = useModel();
   return <View className='tag-pannel'>
     <View className='tag-bar flex-row-center'>
       <View className='tag-type'>
@@ -140,38 +142,52 @@ function DropButtonPanel() {
 }
 // @type Page | @dec 试卷列表
 function PaperList() {
-   
-    const model = useModel();
-    return <View className='paper-list'>
-      {model.showfilterPanel && <View 
-        onClick={()=>{model.setShowFilterPanel(false)}}
-        className='list-dackdim'></View>}
-      {model.list.map((item: Paper)=>{
-        return <View key={item.id} className='paper-item flex-between'>
-            <View className='flex-center'>
-              <View className='paper-pic'> 
-              </View>
-              <View className='paper-info'> 
-                  <View>{item.name}</View>
-                  <View className='paper-info-dec flex-row-center'>
-                      {/* <View className='paper-info-tag'>小学数学</View> */}
-                      <View className='paper-dec-tag'>
-                        <Text>{model.gradeOptionMap[item.gradeId]?.name}/</Text>
-                        <Text>{model.gradeStepOptionMap[item.gradeStepId]?.name}/</Text>
-                        <Text>{termType[item.term]}</Text>
-                      </View>
-                      <View className='paper-dec-tag'>{model.subjectOptionMap[item.subjectId]?.name}</View>
-                  </View>
-              </View>
+  // 跳转试卷详情页面
+  const toPaperDetail = (id: string) => {
+    Taro.navigateTo({ url: '/pages/paper/index?id=' + id })
+  }
+  const {gradeOptionMap, gradeStepOptionMap, subjectOptionMap} = useGlobalModel()
+  const model = useModel();
+  return <ScrollView
+    onScrollToLower={() => {
+        console.log('debug: 下拉到底部')
+        model.loadMore()
+    }}
+    scrollY
+    className='paper-list'
+  >
+    {model.showfilterPanel && <View onClick={() => { model.setShowFilterPanel(false) }} className='list-dackdim'></View>}
+    <View className='paper-list-content'>
+      {model.list.map((item: Paper) => {
+        return <View onClick={() => {
+          toPaperDetail(item.id)
+        }} key={item.id} className='paper-item flex-between'>
+          <View className='flex-center'>
+            <View className='paper-pic'>
             </View>
-            <View className='paper-data'> 
-                <View className='paper-price'>{item.price? <Text>¥{item.price} </Text>: <Text className='fz-30'>免费</Text>}</View>
-                <View>{item.download}下载</View>
-                <View>{item.pageView}浏览</View>
+            <View className='paper-info'>
+              <View>{item.name}</View>
+              <View className='paper-info-dec flex-row-center'>
+                {/* <View className='paper-info-tag'>小学数学</View> */}
+                <View className='paper-dec-tag'>
+                  <Text>{gradeOptionMap[item.gradeId]?.name}/</Text>
+                  <Text>{gradeStepOptionMap[item.gradeStepId]?.name}/</Text>
+                  <Text>{termType[item.term]}</Text>
+                </View>
+                <View className='paper-dec-tag'>{subjectOptionMap[item.subjectId]?.name}</View>
+              </View>
             </View>
           </View>
-        })}
-  </View>
+          <View className='paper-data'>
+            {/* <View className='paper-price'>{item.price? <Text>¥{item.price} </Text>: <Text className='fz-30'>免费</Text>}</View> */}
+            <View>{item.download}下载</View>
+            <View>{item.pageView}浏览</View>
+          </View>
+        </View>
+      })}
+      {model.pageloaded && model.total == model.list.length && <View className='flex-center m-t-20 color-999'>没有更多了</View>}
+    </View>
+  </ScrollView>
 }
 // @type Page | @dec 主页面
 function Index() {

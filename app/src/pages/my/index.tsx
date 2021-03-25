@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Image, Text, Icon } from '@tarojs/components'
 import './index.less'
 import avatar from '../../resource/icon/avatar.jpg'
@@ -11,6 +11,7 @@ import avatar from '../../resource/icon/avatar.jpg'
 // }
 
 function Index(props) {
+
   return <View className='my-page page'>
     <View className="user-card">
       <View className="user-info">

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { createModel } from "hox";
-import { useOptionFormListHook, usePage } from "../../utils/hooks";
+import { usePage } from "../../utils/hooks";
 import { deleteObjectEmptyKey } from '../../utils/index'
+let pageloaded = false
 
 export type SortType = "price" | "created" | "download" | undefined
 export interface queryType {
@@ -19,35 +20,37 @@ export enum SortEnum {
 
 function useModel() {
   const [keyword, setKeyword] = useState<string>()
-  const { list: gradeList, optionsMap: gradeOptionMap } = useOptionFormListHook({url: '/grade/list'})
-  const { list: gradeStepList, optionsMap: gradeStepOptionMap } = useOptionFormListHook({url: '/gradeStep/list'})
-  const { list: subjectList } = useOptionFormListHook({ url: '/subject/list' })
-  const { list: tagList } = useOptionFormListHook({ url: '/tag/list' })
   const [ showfilterPanel, setShowFilterPanel ] = useState(false);
   const [ query, setQuery ] = useState<queryType>({})
   const [ sort, setSort ] = useState<SortType>(SortEnum.download)
-  const { optionsMap: tagOptionMap,} = useOptionFormListHook({url: '/tag/list'});
-  const { optionsMap: subjectOptionMap,} = useOptionFormListHook({url: '/subject/list'});
-  const { list, updateQueryAndSort} = usePage(
-    { 
+  const {total, list, reload, loadMore} = usePage(
+  { 
       url: '/paper/page', 
-      pageSize: 20, 
-      query: {}, 
+      pageSize: 5, 
+      query, 
       sort: {value: SortEnum.download, direction: 'DESC'}
-    })
-  
+  })
+
   useEffect(()=>{
-    console.log('debug:筛选条件发生了变化', query, sort);
-    seaech()
-  }, [query, sort])
+    // 避免第一次刷新
+    if(!pageloaded) {
+      pageloaded = true
+    }else {
+      seaech()
+    }
+  }, [sort, query])
 
   const seaech = () =>{
     let _query = JSON.parse(JSON.stringify(query)) 
     deleteObjectEmptyKey(_query)
-    updateQueryAndSort(_query, {
-      "value": sort,
-		  "direction": sort == SortEnum.free ? "ASC" : "DESC"
-    }, keyword)
+    reload(1, {
+      query: _query,
+      sort: {
+        "value": sort,
+		    "direction": sort == SortEnum.free ? "ASC" : "DESC"
+      },
+      keyword
+    })
   }
 
   const updateQuery = (q: queryType) => {
@@ -57,7 +60,7 @@ function useModel() {
     setQuery(Object.assign({}, query, q))
   }
 
-
+  
 
   return {
     list,
@@ -66,19 +69,14 @@ function useModel() {
     setSort,
     sort,
     query,
-    subjectList,
-    tagList,
     setQuery,
     updateQuery,
-    gradeList,  
-    gradeStepList,
-    gradeOptionMap,
-    gradeStepOptionMap,
-    tagOptionMap,
-    subjectOptionMap,
     keyword,
     setKeyword,
-    seaech
+    seaech,
+    loadMore,
+    total,
+    pageloaded
   };
 }
 

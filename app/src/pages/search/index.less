@@ -1,4 +1,6 @@
 .search-page  {
+    height: 100%;
+    overflow: hidden;
     .navigationBar {
         height: 200px;
         width: 100%;
@@ -27,6 +29,7 @@
     }
     .filter-panel {
         position: relative;
+        border-bottom: 1px solid #eee;
     }
     .drop-button-panel {
         background-color: #fff;
@@ -45,6 +48,7 @@
         }
     }
     .tag-pannel {
+        z-index: 1001;
         position: absolute;
         top: 71px;
         width: 100%;
@@ -89,12 +93,17 @@
         z-index: 999;
         background: rgba(000, 000, 000, 0.3);
     }
+    .paper-list-content {
+        padding-bottom: 200px;
+    }
     .paper-list {
+        height: 80%;
+        overflow: auto;
         position: relative;
         .paper-item {
             font-size: 30px;
             padding: 45px 20px;
-            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
             background-color: #fff;
         }
         .paper-data {
@@ -135,7 +144,6 @@
         }
     }
     .search-header {
-        position: sticky;
         z-index: 1000;
         top: 0px;
     }

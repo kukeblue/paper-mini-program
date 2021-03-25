@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/index/index',
     'pages/search/index',
+    'pages/paper/index',
     'pages/my/index'
   ],
   window: {

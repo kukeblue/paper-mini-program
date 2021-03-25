@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import request from './request'
+import Taro from '@tarojs/taro'
 
 export interface SortWarp {
   value?: string,
@@ -16,12 +17,13 @@ interface usePageProps {
   onReloadAfter?: (res: any) => void
 }
 
-export function usePage(props: usePageProps) {
+let pageSearchData = {}
 
+export function usePage(props: usePageProps) {
   const { url, pageSize, onReloadAfter } = props;
-  const [query, setQuery] = useState<any>(props.query);
-  const [keyword, setKeyword] = useState<any>(props.keyword);
-  const [sort, setSort] = useState<any>(props.sort);
+  // const [query, setQuery] = useState<any>(props.query);
+  // const [keyword, setKeyword] = useState<any>(props.keyword);
+  // const [sort, setSort] = useState<any>(props.sort);
   const [status, setStatus] = useState<string>('more');
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState([]);
@@ -29,30 +31,34 @@ export function usePage(props: usePageProps) {
   const ref = useRef({ pageNo: 1 });
 
   const updateQueryAndSort = (query, sort, keyword?)=> {
-    setQuery(query)
-    setSort(sort)
-    keyword && setKeyword(keyword)
+    // setQuery(query)
+    // setSort(sort)
+    // keyword && setKeyword(keyword)
   }
 
   useEffect(() => {
     reload()
-  }, [query, sort, keyword])
+  }, [])
 
-  const reload = async (pageNo?: number) => {
+  const reload = async (pageNo?: number, data?: any) => {
+    if(data) {
+      pageSearchData = data
+    }
+    Taro.showLoading({title: '加载中...'})
     setStatus('loading');
     if (!pageNo) pageNo = 1;
     ref.current.pageNo = pageNo;
     const pz = pageSize || 10;
+    const {sort, query, keyword} = props
     const resp: any = await request({
-      url, data: {
+      url, data: Object.assign({
         sort,
         query,
         pageNo,
         pageSize: pz,
         keyword
-      }
+      }, data || pageSearchData)
     });
-    console.log('分页PAGE获取成功',query, resp)
     if (resp.status === 0) {
       setTotal(resp.page.total);
       let newList
@@ -63,7 +69,7 @@ export function usePage(props: usePageProps) {
       }
       setList(newList);
       ref.current.pageNo = pageNo + 1;
-      if (resp.page.pages < pz) {
+      if (resp.page.total == newList.length) {
         setStatus('noMore');
       } else {
         setStatus("more");
@@ -72,12 +78,13 @@ export function usePage(props: usePageProps) {
       setStatus("noMore");
     }
     onReloadAfter && onReloadAfter(resp);
+    Taro.hideLoading()
   }
   const loadMore = async () => {
     if (status === 'noMore') return;
     await reload(ref.current.pageNo);
   }
-  return { list, setList, status, setStatus, reload, loadMore, total, setQuery, setSort, updateQueryAndSort };
+  return { list, setList, status, setStatus, reload, loadMore, total, updateQueryAndSort };
 }
 
 
